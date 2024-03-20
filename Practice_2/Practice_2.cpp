@@ -113,12 +113,27 @@ int main()
 	const int maximumElementCount = 10;
 	int currentElementCount = 3;
 
-	struct Record Table[10];
+	Record Table[10];
 	Table[0] = { "Сенкевич", "Потоп", 1978, 'Х', {11,11,2020} };
 	Table[1] = { "Ландау", "Механика", 1989, 'У', {11,11,2020} };
 	Table[2] = { "Дойль", "Сумчатые",  1990, 'C', {12,12,2010} };
 
+	Record* A = (Record*) calloc(maximumElementCount, sizeof(Record));
+
+	for (int i = 0; i < maximumElementCount; i++) {
+		A[i] = Table[i];
+	}
+
+	Record* B = new Record[10];
+
+	for (int i = 0; i < maximumElementCount; i++) {
+		B[i] = A[i];
+	}
+
 	Draw(Table, currentElementCount);
-	insertMaximumRecord(Table, &currentElementCount, maximumElementCount);
-	Draw(Table, currentElementCount);
+	Draw(A, currentElementCount);
+	Draw(B, currentElementCount);
+
+	free(A);
+	delete[] B;
 }
