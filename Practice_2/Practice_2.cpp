@@ -1,5 +1,4 @@
-﻿//Var
-#include <iostream>
+﻿#include <iostream>
 #include <windows.h>
 #include <string>
 
