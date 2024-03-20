@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <windows.h>
 #include <string>
+#include <cstdlib>
 
 using namespace std;
 
@@ -105,6 +106,36 @@ void insertMaximumRecord(struct Record* Table, int* currentElementCount, int max
 	}
 }
 
+void drawArray(Record* array, int currentElementCount) {
+	int width = 78 + 9;
+	cout << endl;	cout.width(width + 1); cout.fill('-'); cout << "-" << endl;
+	cout.fill(' '); cout.width(width);  cout << left << "|Каталог библиотеки"; cout << "|" << endl;
+	cout.width(width + 1); cout.fill('-'); cout << "-" << endl;
+	cout.fill(' ');
+	cout << left << "|     Автор книги    ";
+	cout << left << "|     Название   ";
+	cout << left << "| Год выпуска";
+	cout << left << "| Группа";
+	cout << left << " | Дата подписания рукописи ";
+	cout << "|" << endl;
+	cout.width(width + 1); cout.fill('-'); cout << "-" << endl;
+	cout.fill(' ');
+
+	for (int i = 0; i < currentElementCount; i++) {
+		cout << left << "|"; cout.width(20); cout << left << array[i].author;
+		cout << left << "|"; cout.width(16); cout << left << array[i].title;
+		cout << left << "|"; cout.width(12); cout << left << array[i].year;
+		cout << left << "|"; cout.width(8); cout << left << array[i].group;
+		cout << left << "|";
+		printDate(array[i].date.day, array[i].date.month, array[i].date.year, 28);
+		cout << "|" << endl;
+	}
+
+	cout.width(width + 1); cout.fill('-'); cout << "-" << endl;
+	cout.fill(' '); cout.width(width);  cout << left << "|Примечание: Х – худож. лит-ра; У - учебная лит-ра; С - справочная лит-ра. "; cout << "|" << endl;
+	cout.width(width + 1); cout.fill('-'); cout << "-" << endl;
+}
+
 int main()
 {
 	SetConsoleCP(1251);
@@ -118,22 +149,34 @@ int main()
 	Table[1] = { "Ландау", "Механика", 1989, 'У', {11,11,2020} };
 	Table[2] = { "Дойль", "Сумчатые",  1990, 'C', {12,12,2010} };
 
-	Record* A = (Record*) calloc(maximumElementCount, sizeof(Record));
-
-	for (int i = 0; i < maximumElementCount; i++) {
-		A[i] = Table[i];
+	cout << endl << "Практическая № 2 (Динамические массивы):" << endl;
+	
+	Record* A;
+	int n = 3;
+	A = (Record*) malloc(n * sizeof(Record));
+	for (int i = 0; i < n; i++) {
+		strcpy_s(A[i].author, Table[i].author);
+		strcpy_s(A[i].title, Table[i].title);
 	}
 
-	Record* B = new Record[10];
-
-	for (int i = 0; i < maximumElementCount; i++) {
-		B[i] = A[i];
+	Record** B;
+	B = (Record**) new Record * [10];
+	for (int i = 0; i < 10; i++) {
+		B[i] = (Record*) new Record;
+		*(B[i]) = Table[i];
 	}
 
-	Draw(Table, currentElementCount);
-	Draw(A, currentElementCount);
-	Draw(B, currentElementCount);
+	A = (Record*) realloc(A, 10 * sizeof(Record));
 
-	free(A);
+	//адрес а[i], значение a[i]->строковое_поле, адрес в[i], значение в[i]->строковое_поле.
+	for (int i = 0; i < 10; i++) {
+		cout << endl << "адрес A[i]: " << &A[i] << " A[i]->author: " << A[i].author << " A[i]->title: " << A[i].title;
+		cout << endl << "адрес B[i]: " << &B[i] << " B[i]->author: " << B[i]->author << " B[i]->title: " << B[i]->title;
+	}
+
+	for (int i = 0; i < 10; i++) {
+		delete B[i];
+	}
 	delete[] B;
+	free(A);
 }
